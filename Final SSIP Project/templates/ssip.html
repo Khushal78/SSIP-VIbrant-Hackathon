@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSIP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: rgb(188, 188, 188);
+            margin: 0;
+            padding: 0;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        li a:hover {
+            /* background-color: #111; */
+            color: #50d1c0;
+            background: black;
+            box-shadow: 0 0 20px 0 rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+
+        .leftbox {
+            float: left;
+            width: 50%;
+            margin-top: 150px;
+        }
+
+        .rightbox {
+            float: left;
+            width: 50%;
+            margin-top: 150px;
+        }
+
+        /* Apply the 'Lexend' font to the text */
+        p,
+        li {
+            font-family: 'Lexend', sans-serif;
+        }
+    </style>
+</head>
+
+<body style="background-color: rgb(188, 188, 188);">
+    <div>
+        <ul style="background-color: #ffffff;">
+            <li style="float:right;font-size: x-large"><a class="active" href="register.html">Register</a></li>
+            <li style="float:right;font-size: x-large"><a href="login.html">Login</a></li>
+            <li style="float:right;font-size: x-large"><a href="visualization.html">Data Visualization</a></li>
+            <li style="float:right;font-size: x-large"><a href="ssip.html">Home</a></li>
+            <li style="float:left;margin-top: 5px;margin-left: 10px;"><img src="Qr logo.png" width="50px"></li>
+        </ul>
+        
+        
+    </div>
+    <div class="leftbox">
+        <p style="font-size:xxx-large;margin-left:140px;">Steps</p>
+        <ul style="list-style-type:circle">
+            <li style="margin-left: 150px;">QR Code Scan: <br>
+                &nbsp;&nbsp;Users scan the QR code to access the feedback form.
+            </li>
+            <br>
+            <br>
+            <li style="margin-left: 150px;">Feedback Submission: <br>
+                &nbsp;&nbsp;Fill out the feedback form with your responses.
+            </li>
+            <br>
+            <br>
+            <li style="margin-left: 150px;">Data Storage: <br>
+                &nbsp;&nbsp;Your feedback is securely stored in the MongoDB Cloud.</li>
+            <br>
+            <br>
+            <li style="margin-left: 150px;">Analysis & CSV: <br>
+                &nbsp;&nbsp;Data is analyzed using Python, creating separate CSV files for each district.</li>
+            <br>
+            <br>
+            <li style="margin-left: 150px;">Visualization: <br>
+                &nbsp;&nbsp;Python generates visual representations of district-wise feedback.</li>
+            <br>
+            <br>
+            <li style="margin-left: 150px;">Front-end Display: <br>
+                &nbsp;&nbsp;Interactive front-end displays district data and pie charts.</li>
+        </ul>
+    </div>
+    <div class="rightbox">
+        <p style="font-size:xxx-large;">Qr Based Feedback</p>
+        <img src="Qr logo.png" width="160px" style="margin-left: 100px;">
+    </div>
+</body>
+
+</html>

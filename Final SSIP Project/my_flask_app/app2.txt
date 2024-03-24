@@ -1,0 +1,89 @@
+from flask import Flask, render_template, request, redirect, url_for
+import csv
+import qrcode
+from io import BytesIO
+import base64
+
+
+
+app = Flask(__name__)
+
+# Define the route to serve the feedback form
+@app.route('/')
+def feedback_form():
+    return render_template('feedback.html')
+
+# Define the route to handle form submission and store data in a CSV file
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.form['firstName']
+        last_name = request.form['lastName']
+        email = request.form['email']
+        police_address = request.form['policeAddress']
+        district = request.form['district']
+        comments = request.form['comments']
+        rating = request.form['rating']
+        
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr_data = f"Name: {first_name} {last_name}\nEmail: {email}\nPolice Address: {police_address}\nDistrict: {district}\nComments: {comments}\nRating: {rating}"
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        # Save the QR code to a BytesIO object
+        img_bytes = BytesIO()
+        img.save(img_bytes, format="PNG")
+        img_bytes.seek(0)
+
+        # Write data to a CSV file
+        with open('feedback.csv', mode='a', newline='') as csv_file:
+            fieldnames = ['First Name', 'Last Name', 'Email', 'Police Station Address', 'District', 'Comments', 'Rating']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if csv_file.tell() == 0:  # Check if the file is empty
+                writer.writeheader()  # Write header only if the file is empty
+            writer.writerow({
+                'First Name': first_name,
+                'Last Name': last_name,
+                'Email': email,
+                'Police Station Address': police_address,
+                'District': district,
+                'Comments': comments,
+                'Rating': rating
+            })
+
+        return redirect(url_for('feedback_form'))  # Redirect to the feedback form
+    
+@app.route('/generate_qr', methods=['POST'])
+def generate_qr():
+    if request.method == 'POST':
+        data = request.get_json()
+
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr_data = f"Name: {data['firstName']} {data['lastName']}\nEmail: {data['email']}\nPolice Address: {data['policeAddress']}\nDistrict: {data['district']}\nComments: {data['comments']}\nRating: {data['rating']}"
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+
+        # Convert the QR code image to a base64-encoded string
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        qr_image = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+        return {"qr_image": qr_image}
+
+if __name__ == '__main__':
+    app.run(debug=True)

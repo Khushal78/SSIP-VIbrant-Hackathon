@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .container h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+
+        .container input[type="text"],
+        .container input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 0;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .container input[type="submit"] {
+            background: #3498db;
+            color: #fff;
+            border: 0;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .container input[type="submit"]:hover {
+            background: #2980b9;
+        }
+
+        .container p {
+            color: #666;
+        }
+
+        .container p a {
+            text-decoration: none;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id "password" placeholder="Password" required>
+            <input type="submit" value="Register">
+        </form>
+        <p>Already have an account? <a href="login.html">Login</a></p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Get input values
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Create a CSV string with the registration information
+            const csvData = `${username},${password}\n`;
+
+            // Append the CSV data to the existing file (you can replace this logic)
+            appendToCSVFile(csvData);
+
+            // Display a success message (you can implement this)
+            alert('Registration successful!');
+        });
+
+        function appendToCSVFile(data) {
+            // Simulate appending data to a CSV file (this is for demonstration only)
+            // In a real application, you would need a server to handle this process.
+            const existingData = localStorage.getItem('user_data') || '';
+            const updatedData = existingData + data;
+            localStorage.setItem('user_data', updatedData);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+//orignal app file with csv it
+
+from flask import Flask, render_template, request, redirect, url_for
+import csv
+
+app = Flask(__name__)
+
+# Define the route to serve the feedback form
+@app.route('/')
+def feedback_form():
+    return render_template('feedback.html')
+
+# Define the route to handle form submission and store data in a CSV file
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    if request.method == 'POST':
+        # Get form data
+        first_name = request.form['firstName']
+        last_name = request.form['lastName']
+        email = request.form['email']
+        police_address = request.form['policeAddress']
+        district = request.form['district']
+        comments = request.form['comments']
+        rating = request.form['rating']
+
+        # Write data to a CSV file
+        with open('feedback.csv', mode='a', newline='') as csv_file:
+            fieldnames = ['First Name', 'Last Name', 'Email', 'Police Station Address', 'District', 'Comments', 'Rating']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if csv_file.tell() == 0:  # Check if the file is empty
+                writer.writeheader()  # Write header only if the file is empty
+            writer.writerow({
+                'First Name': first_name,
+                'Last Name': last_name,
+                'Email': email,
+                'Police Station Address': police_address,
+                'District': district,
+                'Comments': comments,
+                'Rating': rating
+            })
+
+        return redirect(url_for('feedback_form'))  # Redirect to the feedback form
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+//orignal htmml css and js
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Feedback Form</title>
+    <style>
+            /* Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+h1 {
+    text-align: center;
+    background-color: #0074c3;
+    color: #fff;
+    padding: 20px;
+    font-size: 28px;
+    margin: 0;
+    border-radius: 0 0 5px 5px;
+    width: 100%;
+}
+
+/* Form Container Styles */
+form {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    text-align: left;
+}
+
+/* Label Styles */
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Input and Textarea Styles */
+input[type="text"],
+input[type="email"],
+textarea,
+input[type="number"] {
+    width: 95%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+input[type="number"] {
+    width: 20%;
+}
+
+/* Submit Button Styles */
+input[type="submit"] {
+    display: block; /* Place the Submit button on a new line */
+    background-color: #0074c3;
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 22px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #00578c;
+}
+
+    </style>
+</head>
+
+<body>
+    <h1>QR-Based Citizen Feedback System</h1>
+    <form id="feedbackForm" action="/submit_feedback" method="POST">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="policeAddress">Police Station Address:</label>
+        <input type="text" id="policeAddress" name="policeAddress" required>
+
+        <label for="district">District of Location:</label>
+        <input type="text" id="district" name="district" required>
+
+        <label for="comments">Comments:</label>
+        <textarea id="comments" name="comments" rows="4" required></textarea>
+
+        <label for="rating">Rating (1-10):</label>
+        <input type="number" id="rating" name="rating" min="1" max="10" required>
+
+        <input type="submit" value="Submit">
+        <script src="script.js"></script>
+    </form>
+</body>
+
+</html>
+
+
+.js
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+    var email = document.getElementById("email").value;
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    var rating = parseInt(document.getElementById("rating").value);
+    var emailError = document.getElementById("emailError");
+    var ratingError = document.getElementById("ratingError");
+
+    // Reset error messages
+    emailError.textContent = "";
+    ratingError.textContent = "";
+
+    if (!emailPattern.test(email)) {
+        emailError.textContent = "Please enter a valid email address.";
+        event.preventDefault(); // Prevent the form from submitting
+    } else if (rating < 1 || rating > 10) {
+        ratingError.textContent = "Rating must be between 1 and 10.";
+        event.preventDefault();
+    } else {
+        // Simulate a successful form submission (replace this with actual form submission code)
+        alert("Feedback submitted successfully!");
+        clearForm(); // Clear the form fields
+        event.preventDefault(); // Prevent the form from submitting for demonstration purposes
+    }
+});
+
+function clearForm() {
+    // Clear form fields after successful submission
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("comments").value = "";
+    document.getElementById("rating").value = "";
+}
